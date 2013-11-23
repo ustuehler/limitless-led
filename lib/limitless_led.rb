@@ -45,10 +45,6 @@ class LimitlessLed
     socket.send packet, 0
   end
 
-  def send_raw(byte)
-    send_packet(byte + "\x00" + "\x55")
-  end
-
   def command(command_key)
     send_packet COMMANDS[command_key] + "\x00" + "\x55"
   end
@@ -57,6 +53,10 @@ class LimitlessLed
     while true
       send_packet(COLOR_PACKETS.sample)
     end
+  end
+
+  def color(color)
+    send_packet "\x40#{color.to_s(16).hex.chr}\x55"
   end
 
   def smooth_and_fast

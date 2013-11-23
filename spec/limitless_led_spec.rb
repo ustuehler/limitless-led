@@ -40,6 +40,18 @@ describe LimitlessLed do
     end
   end
 
+  describe '#color' do
+    it 'changes the color to 255' do
+      subject.should_receive(:send_packet).with("\x40\xFF\x55")
+      subject.color(255)
+    end
+
+    it 'changes the color to 255' do
+      subject.should_receive(:send_packet).with("\x40\x55")
+      subject.color(89)
+    end
+  end
+
   describe '#send_packet' do
     it 'should create a new socket and send the packet' do
       fake_socket = double(:fake_udp_socket)
