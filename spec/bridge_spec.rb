@@ -4,7 +4,7 @@ describe LimitlessLed do
 
   let(:params) { {} }
 
-  subject { LimitlessLed.new(params) }
+  subject { LimitlessLed::Bridge.new(params) }
 
   describe 'can be initialized with default values' do
     its(:host) { should == 'localhost' }
@@ -41,14 +41,30 @@ describe LimitlessLed do
   end
 
   describe '#color' do
-    it 'changes the color to 255' do
-      subject.should_receive(:send_packet).with("\x40\xFF\x55")
-      subject.color(255)
+    context 'when given an integer 0 - 255' do
+      it 'changes the color to 255 (blue)' do
+        subject.should_receive(:send_packet).with("\x40" + 255.chr + "\x55")
+        subject.color(255)
+      end
+
+      it 'changes the color to 89' do
+        subject.should_receive(:send_packet).with("\x40" + 89.chr + "\x55")
+        subject.color(89)
+      end
     end
 
-    it 'changes the color to 255' do
-      subject.should_receive(:send_packet).with("\x40\x55")
-      subject.color(89)
+    context 'when given a ruby Color object' do
+      before { pending }
+      
+      it 'it changes the color to 255 (blue)' do
+        subject.should_receive(:send_packet).with("\x40" + 255.chr + "\x55")
+        subject.color(Color::RGB::Blue)
+      end
+
+      it 'it changes the color to 170 (red)' do
+        subject.should_receive(:send_packet).with("\x40" + 255.chr + "\x55")
+        subject.color(Color::RGB::Red)
+      end
     end
   end
 
