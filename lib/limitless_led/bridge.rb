@@ -8,7 +8,8 @@ module LimitlessLed
       disco: 77,
       disco_slower: 67,
       disco_faster: 68,
-      color: 64
+      color: 64,
+      brightness: 78
     }
 
     attr_accessor :host, :port
@@ -46,6 +47,10 @@ module LimitlessLed
        end
 
       command :color, color_code
+    end
+
+    def brightness(amount)
+      command :brightness, amount
     end
 
     def send_packet(packet)

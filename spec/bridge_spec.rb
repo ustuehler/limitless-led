@@ -88,6 +88,13 @@ describe LimitlessLed do
     end
   end
 
+  describe '#brightness' do
+    it 'sends the brightness command' do
+      subject.should_receive(:send_packet).with(78.chr + 2.chr + 85.chr)
+      subject.brightness(2)
+    end
+  end
+
   describe '#send_packet' do
     it 'should create a new socket and send the packet' do
       fake_socket = double(:fake_udp_socket)
