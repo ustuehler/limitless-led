@@ -54,16 +54,36 @@ describe LimitlessLed do
     end
 
     context 'when given a ruby Color object' do
-      before { pending }
-      
-      it 'it changes the color to 255 (blue)' do
-        subject.should_receive(:send_packet).with("\x40" + 255.chr + "\x55")
+      it 'it changes the color to 0 (blue)' do
+        subject.should_receive(:send_packet).with("\x40" + 0.chr + "\x55")
         subject.color(Color::RGB::Blue)
       end
 
       it 'it changes the color to 170 (red)' do
-        subject.should_receive(:send_packet).with("\x40" + 255.chr + "\x55")
+        subject.should_receive(:send_packet).with("\x40" + 170.chr + "\x55")
         subject.color(Color::RGB::Red)
+      end
+    end
+
+    context 'when given a string' do
+      it 'it changes the color to 0 (blue)' do
+        subject.should_receive(:send_packet).with("\x40" + 0.chr + "\x55")
+        subject.color('blue')
+      end
+
+      it 'it changes the color to 192 (pink)' do
+        subject.should_receive(:send_packet).with("\x40" + 192.chr + "\x55")
+        subject.color('DeepPink')
+      end
+
+      it 'it changes the color to 85 (green)' do
+        subject.should_receive(:send_packet).with("\x40" + 85.chr + "\x55")
+        subject.color('green')
+      end
+
+      it 'it changes the color to 170 (red)' do
+        subject.should_receive(:send_packet).with("\x40" + 170.chr + "\x55")
+        subject.color('red')
       end
     end
   end

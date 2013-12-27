@@ -1,5 +1,6 @@
 module LimitlessLed
   class Bridge
+    include Colors
 
     COMMANDS = {
       all_off: 65,
@@ -35,6 +36,18 @@ module LimitlessLed
       send_packet "\xc2\x00\x55"
     end
 
+    def color(color)
+      color_code = if color.is_a?(Color::RGB)
+         color_code_from_color(color)
+       elsif color.is_a?(Integer)
+         color
+       elsif color.is_a?(String)
+         color_code_from_color Color::RGB.const_get(color.camelize)
+       end
+
+      command :color, color_code
+    end
+
     def send_packet(packet)
       socket.send packet, 0
     end
@@ -45,17 +58,13 @@ module LimitlessLed
 
     def go_crazy
       while true
-        send_packet(COLOR_PACKETS.sample)
+        color rand(256)
       end
     end
 
-    def color(color)
-      command :color, color
-    end
-
     def smooth_and_fast
-      COLOR_PACKETS.cycle do |color_packet|
-        send_packet(color_packet)
+      0..255.cycle do |color_code|
+        color color_code
         sleep 1/100.0
       end
     end
