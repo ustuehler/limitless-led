@@ -4,12 +4,9 @@ limitless-led
 A Ruby client library for controlling the [LimitlessLED v3.0 RGBW color-changing light bulbs](http://www.limitlessled.com/),
 based on the official [LimitlessLED API documentation](http://www.limitlessled.com/dev/).
 
-**This is a very early Alpha / proof-of-concept.** It works, but it's missing a lot of features that 
-hopefully we'll have time to add soon.
-
 ## Usage
 
-    bridge = LimitlessLed.new(host: '192.168.1.100', port: 8899)
+    bridge = LimitlessLed::Bridge.new(host: '192.168.1.100', port: 8899)
     
     bridge.all_on        # all lights are on
     bridge.all_off       # all lights are off
@@ -17,6 +14,22 @@ hopefully we'll have time to add soon.
     bridge.disco         # disco mode!
     bridge.disco_faster  # disco mode faster
     bridge.disco_slower  # disco mode slower
+
+    # change the color by calling #color with either a color string, integer, or Color::RGB object
+    # see: https://github.com/halostatue/color/blob/master/lib/color/rgb-colors.rb for a list
+    # of all the named colors
+    bridge.color 'Red'                # color is red
+    bridge.color Color::RGB::Red      # color is red
+    bridge.color 170                  # color is red
+
+    # adjust brightness on a scale from 2 - 27 (27 is full brightness)
+    bridge.brightness 27              # full brightness
+
+    # control a single group
+    group = bridge.group(1)           # supports up to 4 groups (1 - 4)
+    group.color 'Blue'
+    group.brightness 25
+
     
 ## Note
 
