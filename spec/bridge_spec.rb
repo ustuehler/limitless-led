@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe LimitlessLed do
+describe LimitlessLed::Bridge do
 
   let(:params) { {} }
 
@@ -34,7 +34,6 @@ describe LimitlessLed do
 
   describe '#white' do
     it 'should set the color to white' do
-      subject.should_receive(:all_on)
       subject.should_receive(:send_packet).with("\xc2\x00\x55")
       subject.white
     end
@@ -93,6 +92,12 @@ describe LimitlessLed do
       subject.should_receive(:send_packet).with(78.chr + 2.chr + 85.chr)
       subject.brightness(2)
     end
+
+    it 'raises an exception if giving an invalid brightness amount' do
+      expect { subject.brightness(1)}.to raise_error(ArgumentError)
+      expect { subject.brightness(28)}.to raise_error(ArgumentError)
+      expect { subject.brightness(0)}.to raise_error(ArgumentError)
+    end
   end
 
   describe '#send_packet' do
@@ -102,6 +107,18 @@ describe LimitlessLed do
       fake_socket.should_receive(:send).with("stuff", 0)
       UDPSocket.should_receive(:new) { fake_socket }
       subject.send(:send_packet, "stuff")
+    end
+  end
+
+  describe '#groups' do
+    it 'returns a object representing a group' do
+      group1 = subject.group(1)
+      group1.should be_a(LimitlessLed::Group)
+    end
+
+    it 'raises an exception if given an invalid group number' do
+      expect { subject.group(5) }.to raise_error(ArgumentError)
+      expect { subject.group(0) }.to raise_error(ArgumentError)
     end
   end
 

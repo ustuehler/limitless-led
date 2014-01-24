@@ -9,7 +9,15 @@ module LimitlessLed
       disco_slower: 67,
       disco_faster: 68,
       color: 64,
-      brightness: 78
+      brightness: 78,
+      group_1_on: 69,
+      group_1_off: 70,
+      group_2_on: 71,
+      group_2_off: 72,
+      group_3_on: 73,
+      group_3_off: 74,
+      group_4_on: 75,
+      group_4_off: 76
     }
 
     attr_accessor :host, :port
@@ -17,6 +25,10 @@ module LimitlessLed
     def initialize(host: 'localhost', port: 8899)
       @host = host
       @port = port
+    end
+
+    def group(number)
+      LimitlessLed::Group.new(number, self)
     end
 
     def socket
@@ -32,8 +44,6 @@ module LimitlessLed
     end
 
     def white
-      all_on
-      sleep 0.1
       send_packet "\xc2\x00\x55"
     end
 
@@ -50,6 +60,7 @@ module LimitlessLed
     end
 
     def brightness(amount)
+      raise(ArgumentError.new('Brightness must be within 2 - 27')) unless (2..27).include?(amount)
       command :brightness, amount
     end
 
