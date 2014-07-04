@@ -22,7 +22,7 @@ module LimitlessLed
 
     attr_accessor :host, :port
 
-    def initialize(host: 'localhost', port: 8899)
+    def initialize(host = 'localhost', port = 8899)
       @host = host
       @port = port
     end
